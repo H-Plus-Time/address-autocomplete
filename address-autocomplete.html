@@ -66,27 +66,43 @@ Example:
       /**
        * Latitude corresponding to filled-in address
        */
-      latitude: Number,
+      latitude: {
+        type: Number,
+        notify: true
+      },
       /**
        * Longitude corresponding to filled-in address
        */
-      longitude: Number,
+      longitude: {
+        type: Number,
+        notify: true
+      },
 
-      address: {
+      name: {
+        type: String,
+        notify: true
+      },
+
+      formattedAddress: {
+        type: String,
+        notify: true
+      }
+
+      allowAddress: {
         type: Boolean,
         value: function() { return false}
       },
-      establishment: {
+      allowEstablishment: {
         type: Boolean,
         value: function() { return false}
       },
-      geocode: {
+      allowGeocode: {
         type: Boolean,
         value: function() { return false}
       },
       types: {
         type: Array,
-        computed: 'computeTypes(address, establishment, geocode)'
+        computed: 'computeTypes(allowAddress, allowEstablishment, allowGeocode)'
       }
     },
 

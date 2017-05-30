@@ -62,7 +62,32 @@ Example:
        * A Google Maps API for Business Client ID. To obtain a Maps API for Business Client ID, see developers.google.com/maps/documentation/business/.
        * If set, a Client ID will take precedence over an API Key.
        */
-      clientId: String
+      clientId: String,
+      /**
+       * Latitude corresponding to filled-in address
+       */
+      latitude: Number,
+      /**
+       * Longitude corresponding to filled-in address
+       */
+      longitude: Number,
+
+      address: {
+        type: Boolean,
+        value: function() { return false}
+      },
+      establishment: {
+        type: Boolean,
+        value: function() { return false}
+      },
+      geocode: {
+        type: Boolean,
+        value: function() { return false}
+      },
+      types: {
+        type: Array,
+        computed: 'computeTypes(address, establishment, geocode)'
+      }
     },
 
     ready: function() {
@@ -81,6 +106,26 @@ Example:
       this._initialize();
     },
 
+    computeTypes: function(address, establishment, geocode) {
+      if (address) {
+        // Follow the spec - address overrides everything
+        return ['address'];
+      }
+      if(establishment) {
+        if (geocode) {
+          // geocode and establishment are compatible, but resolve to []
+          return [];
+        } else {
+          return ['establishment'];
+        }
+      }
+      if (geocode) {
+        return ['geocode'];
+      }
+      // no restrictions specified
+      return [];
+    },
+
     _initialize: function() {
       if (!this.isAttached) {
         return;
@@ -93,7 +138,7 @@ Example:
       }
       
       var input = this.$.address1Input;
-      var options = { types: ['address'] };
+      var options = { types: this.types};
       this.autocomplete = new window.google.maps.places.Autocomplete(input, options);
       
       this._boundFillInAddress = this._fillInAddress.bind(this);
@@ -109,7 +154,8 @@ Example:
       if (!place) {
         return;
       }
-
+      this.set('latitude', place.geometry.location.lat());
+      this.set('longitude', place.geometry.location.lng());
       this.$.address1Input.value = (this._getAddressComponent(place, 'street_number', 'short_name') 
           + ' ' + this._getAddressComponent(place, 'route', 'long_name')).trim() || place.name;
       this.$.address2Input.value = '';

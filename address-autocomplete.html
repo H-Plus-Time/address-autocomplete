@@ -154,6 +154,7 @@ Example:
       if (!place) {
         return;
       }
+      this.set('name', place.name);
       this.set('formattedAddress', place.formatted_address);
       this.set('latitude', place.geometry.location.lat());
       this.set('longitude', place.geometry.location.lng());

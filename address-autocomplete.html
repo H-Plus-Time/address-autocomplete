@@ -36,11 +36,11 @@ Example:
       libraries="places"
       on-api-load="_mapsApiLoaded"></google-maps-api>
 
-    <paper-input id="address1Input" type="text" placeholder="" label="Street Address 1" autofocus></paper-input>
-    <paper-input id="address2Input" type="text" label="Street Address 2"></paper-input>
-    <paper-input id="cityInput" type="text" label="City"></paper-input>
-    <paper-input id="stateInput" type="text" label="State"></paper-input>
-    <paper-input id="zipCodeInput" type="text" label="ZIP Code"></paper-input>
+    <paper-input id="address1Input" type="text" value="{{address1}}" placeholder="" label="Street Address 1" autofocus></paper-input>
+    <paper-input id="address2Input" type="text" value="{{address2}}" label="Street Address 2"></paper-input>
+    <paper-input id="cityInput" type="text" value="{{city}}" label="City"></paper-input>
+    <paper-input id="stateInput" type="text" value="{{state}}" label="State"></paper-input>
+    <paper-input id="zipCodeInput" type="text" value="{{zipCode}}" label="ZIP Code"></paper-input>
 
   </template>
 
@@ -154,14 +154,15 @@ Example:
       if (!place) {
         return;
       }
+      this.set('formattedAddress', place.formatted_address);
       this.set('latitude', place.geometry.location.lat());
       this.set('longitude', place.geometry.location.lng());
-      this.$.address1Input.value = (this._getAddressComponent(place, 'street_number', 'short_name') 
-          + ' ' + this._getAddressComponent(place, 'route', 'long_name')).trim() || place.name;
-      this.$.address2Input.value = '';
-      this.$.cityInput.value = this._getAddressComponent(place, 'locality', 'long_name');
-      this.$.stateInput.value = this._getAddressComponent(place, 'administrative_area_level_1', 'short_name');
-      this.$.zipCodeInput.value = this._getAddressComponent(place, 'postal_code', 'short_name');
+      this.set('address1', (this._getAddressComponent(place, 'street_number', 'short_name') 
+          + ' ' + this._getAddressComponent(place, 'route', 'long_name')).trim() || place.name);
+      this.set('address2', '');
+      this.set('city', this._getAddressComponent(place, 'locality', 'long_name'));
+      this.set('state', this._getAddressComponent(place, 'administrative_area_level_1', 'short_name'));
+      this.set('zipCode', this._getAddressComponent(place, 'postal_code', 'short_name'));
     },
 
     _getAddressComponent: function (place, component, valueType) {

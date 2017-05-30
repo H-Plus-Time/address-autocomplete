@@ -22,20 +22,18 @@ Example:
 -->
 <dom-module id="address-autocomplete">
 
-  <style>
-    :host {
-      display: block;
-      box-sizing: border-box;
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+    </style>
     <google-maps-api
       api-key="[[apiKey]]"
       client-id="[[clientId]]"
       version="3.exp"
       libraries="places"
-      signed-in="false"
       on-api-load="_mapsApiLoaded"></google-maps-api>
 
     <paper-input id="address1Input" type="text" placeholder="" label="Street Address 1" autofocus></paper-input>
